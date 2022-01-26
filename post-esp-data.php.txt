@@ -1,0 +1,89 @@
+<?php
+
+$servername = "localhost";
+$dbname = "smart_aquaponic_system";
+$username = "admin";
+$password = "paradox214";
+$api_key_value = "tPmAT7Bb3j7F9"; // ESp32 api code
+
+$api_key = $id 
+	 = $env_temp 
+         = $env_humid 
+         = $diss_ox 
+         = $ph_level 
+         = $turbidity 
+         = $tot_diss_solid 
+         = $water_temp 
+         = $hardness 
+         = $wqi
+         = "";
+
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $api_key = test_input($_POST["api_key"]);
+   
+    
+    if($api_key == $api_key_value) {
+	 $id  = test_input($_POST[""]);
+	 $env_temp  = test_input($_POST["env_temp"]);
+         $env_humid  = test_input($_POST["env_humid"]);
+         $diss_ox = test_input($_POST["diss_ox"]);
+         $ph_level = test_input($_POST["ph_level"]);
+         $turbidity = test_input($_POST["turbidity"]);
+         $tot_diss_solid = test_input($_POST["tot_diss_solid"]);
+         $water_temp = test_input($_POST["water_temp"]);
+         $hardness = test_input($_POST["hardness "]);
+         $wqi= test_input($_POST["wqi"]);
+
+
+        
+        $conn = new mysqli($servername, $username, $password, $dbname);
+        
+        
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        } 
+        
+        
+        $sql = "INSERT INTO aquaponic_data (id, env_temp, env_hum, dsslvd_o, ph_level, turbidity, tds, water_temp, hardness, wqi)
+        VALUES ('" . $id . "',
+		'" . $env_temp . "', 
+                '" . $env_hum . "', 
+                '" . $dsslvd_o . "', 
+                '" . $ph_level . "', 
+                '" . $turbidity . "',
+                '" . $tds . "', 
+                '" . $water_temp . "'
+		'" . $hardness . "',
+                '" . $wqi . "',
+		)";
+        
+        
+        if ($conn->query($sql) === TRUE) {
+            echo "New record created successfully";
+        } 
+        else {
+            echo "Error: " . $sql . "<br>" . $conn->error;
+        }
+    
+        $conn->close();
+    }
+    
+    else {
+        echo "Wrong API Key provided.";
+    }
+
+}
+else {
+    echo "No data posted with HTTP POST.";
+}
+
+function test_input($data) {
+    $data = trim($data);
+    $data = stripslashes($data);
+    $data = htmlspecialchars($data);
+    return $data;
+}
+
+?>
+

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html><body>
+<?php
+
+$servername = "localhost";
+$dbname = "smart_aquaponic_system";
+$username = "admin";
+$password = "paradox214";
+
+
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+} 
+
+$sql = mysqli_query($conn, "SELECT * FROM aquaponic_data");
+
+echo '<table cellspacing="5" cellpadding="5">
+      <tr> 
+        <td>env_temp</td> 
+        <td>env_humid</td> 
+        <td>diss_ox</td> 
+        <td>ph_level</td> 
+        <td>turbidity</td>
+        <td>tot_diss_solid</td> 
+        <td>water_temp</td> 
+        <td>hardness</td>
+        <td>wqi</td>
+      </tr>';
+ 
+    while ($row = mysqli_fetch_array($sql)) {
+
+        $row_env_temp = $row["env_temp"];
+        $row_env_humid = $row["env_hum"];
+        $row_diss_ox = $row["dsslvd_o"];
+        $row_ph_level = $row["ph_level"];
+        $row_turbidity = $row["turbidity"]; 
+        $row_tot_diss_solid = $row["tds"]; 
+        $row_water_temp = $row["water_temp"];
+        $row_hardness = $row["hardness"];
+        $row_wqi = $row["wqi"];
+
+
+       
+        echo '<tr> 
+     
+                <td>' . $row_env_temp . '</td> 
+                <td>' . $row_env_humid . '</td> 
+                <td>' . $row_diss_ox . '</td> 
+                <td>' . $row_ph_level . '</td> 
+                <td>' . $row_turbidity . '</td>
+                <td>' . $row_tot_diss_solid . '</td> 
+                <td>' . $row_water_temp . '</td> 
+                <td>' . $row_hardness . '</td>
+                <td>' . $row_wqi . '</td> 
+              </tr>';
+    }
+</table>	
+
+
+<div class="iiot_aiml">
+<!-- Main Input For Receiving Query to our ML -->
+<form action="{{ url_for('predict')}}"method="post">
+<input type="text" id="env_temp" name="env_temp" value="<?php echo $DB_ROW["env_temp"]; ?>">
+<input type="text" id="env_hum" name="env_hum" value="<?php echo $DB_ROW["env_hum"]; ?>">
+<input type="text" id="dsslvd_o" name="dsslvd_o" value="<?php echo $DB_ROW["dsslvd_o"]; ?>">
+<input type="text" id="ph_level" name="ph_level" value="<?php echo $DB_ROW["ph_level"]; ?>">
+<input type="text" id="turbidity" name="turbidity" value="<?php echo $DB_ROW["turbidity"]; ?>">
+<input type="text" id="tds" name="tds" value="<?php echo $DB_ROW["tds"]; ?>">
+<input type="text" id="water_temp" name="water_temp" value="<?php echo $DB_ROW["water_temp"]; ?>">
+<input type="text" id="hardness" name="hardness" value="<?php echo $DB_ROW["hardness"]; ?>">
+<input type="text" id="wqi" name="wqi" value="<?php echo $DB_ROW["wqi"]; ?>">
+</form>
+</div>
+
+
+$conn->close();
+?> 
+
+</body>
+</html>
